@@ -12,7 +12,7 @@ public class CityMapper {
     }
 
 
-    public static City getCity(CityRequest request){
+    public static City toCity(CityRequest request){
         if (request == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class CityMapper {
                 .build();
     }
 
-    public static CityResponse getCityResponse(City city){
+    public static CityResponse toResponse(City city){
         if (city == null) {
             return null;
         }
@@ -38,9 +38,24 @@ public class CityMapper {
                 .countryName(city.getCountryName())
                 .countryCode(city.getCountryCode())
                 .regionCode(city.getRegionCode())
-                .timeZoneOffset(city.getTimeZoneId())
                 .build();
     }
+
+    public static City updateCity(City city,CityRequest request){
+        if (city == null || request == null) {
+            return city;
+        }
+
+        city.setName(request.getName());
+        city.setCityCode(request.getCityCode());
+        city.setCountryName(request.getCountryName());
+        city.setCountryCode(request.getCountryCode());
+        city.setRegionCode(request.getRegionCode());
+
+        return city;
+    }
+
+
 
 
 }

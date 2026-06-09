@@ -1,5 +1,8 @@
 package com.portfolio.location_service.service.impl;
 
+import com.portfolio.location_service.mapper.CityMapper;
+import com.portfolio.location_service.model.City;
+import com.portfolio.location_service.repository.CityRepository;
 import com.portfolio.location_service.service.CityService;
 import com.portfolio.payload.request.CityRequest;
 import com.portfolio.payload.response.CityResponse;
@@ -11,51 +14,72 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
-
-
+    private final CityRepository cityRepository;
 
     @Override
-    public CityResponse createCity(CityRequest request) {
-        return null;
+    public CityResponse createCity(CityRequest request) throws Exception {
+        if (cityRepository.existsByCityCode(request.getCityCode())) {
+            throw new Exception("City with code " + request.getCityCode() + " already exists");
+        }
+
+        City city = CityMapper.toCity(request);
+        City result = cityRepository.save(city);
+
+        return CityMapper.toResponse(result);
     }
 
     @Override
-    public CityResponse getCityById(Long id) {
-        return null;
+    public CityResponse getCityById(Long id) throws Exception {
+        return cityRepository.findById(id)
+                .map(CityMapper::toResponse)
+                .orElseThrow(
+                        () -> new Exception("City with id " + id + " not found")
+                );
     }
 
     @Override
-    public CityResponse updateCity(Long id, CityRequest request) {
-        return null;
+    public CityResponse updateCity(Long id, CityRequest request) throws Exception {
+            return cityRepository.findById(id)
+                    .map(city -> {
+                        City updatedCity = CityMapper.updateCity(city, request);
+                        return cityRepository.save(updatedCity);
+                    })
+                    .map(CityMapper::toResponse)
+                    .orElseThrow(
+                            () -> new Exception("City with id " + id + " not found")
+                    );
     }
 
     @Override
-    public void deleteCityById(Long id) {
+    public void deleteCityById(Long id) throws Exception {
+        City city = cityRepository.findById(id)
+                .orElseThrow(
+                        () -> new Exception("City with id " + id + " not found")
+                );
 
+        cityRepository.delete(city);
     }
 
     @Override
     public Page<CityResponse> getAllCities(Pageable pageable) {
-        return null;
+        return cityRepository.findAll(pageable)
+                .map(CityMapper::toResponse);
     }
 
     @Override
     public Page<CityResponse> searchCities(String keyword, Pageable pageable) {
-        return null;
+        return cityRepository.searchByKeyword(keyword, pageable)
+                .map(CityMapper::toResponse);
     }
 
     @Override
     public Page<CityResponse> getCitiesByCountryCode(String countryCode, Pageable pageable) {
-        return null;
+        return cityRepository.findByCountryCodeIgnoreCase(countryCode, pageable)
+                .map(CityMapper::toResponse);
     }
 
     @Override
     public boolean cityExists(String cityCode) {
-        return false;
-    }
-
-    @Override
-    public boolean validateCityCode(String cityCode) {
-        return false;
+        return cityRepository.existsByCityCode(cityCode);
     }
 }
