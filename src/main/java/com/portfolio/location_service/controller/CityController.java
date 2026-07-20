@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/api/cities")
 public class CityController {
     private final CityService cityService;
 
     /**
      * Endpoint to create a new city.
+     *
      * @param request {@link CityRequest} request the city request
      * @return {@link CityResponse} the created city response
      * @throws Exception if a city with the same city code already exists
@@ -34,6 +35,7 @@ public class CityController {
 
     /**
      * Endpoint to get a city by its ID.
+     *
      * @param id the ID of the city to retrieve
      * @return {@link CityResponse} the city response
      * @throws Exception if the city with the specified ID does not exist
@@ -46,9 +48,10 @@ public class CityController {
 
     /**
      * Endpoint to get all cities with pagination and sorting.
-     * @param page the page number (default is 0)
-     * @param size the page size (default is 10)
-     * @param sortBy the field to sort by (default is "name")
+     *
+     * @param page          the page number (default is 0)
+     * @param size          the page size (default is 10)
+     * @param sortBy        the field to sort by (default is "name")
      * @param sortDirection the sort direction, either "asc" or "desc" (default is "asc")
      * @return a page of {@link CityResponse} objects
      */
@@ -67,7 +70,8 @@ public class CityController {
 
     /**
      * Endpoint to update an existing city by its ID.
-     * @param id the ID of the city to update
+     *
+     * @param id      the ID of the city to update
      * @param request the updated city data
      * @return {@link CityResponse} the updated city response
      * @throws Exception if the city with the specified ID does not exist
@@ -80,6 +84,7 @@ public class CityController {
 
     /**
      * Endpoint to delete a city by its ID.
+     *
      * @param id the ID of the city to delete
      * @return an {@link ApiResponse} indicating the result of the deletion
      * @throws Exception if the city with the specified ID does not exist
@@ -94,10 +99,11 @@ public class CityController {
 
     /**
      * Endpoint to search for cities by a keyword with pagination and sorting.
-     * @param keyword the keyword to search for in city attributes
-     * @param page the page number (default is 0)
-     * @param size the page size (default is 10)
-     * @param sortBy the field to sort by (default is "name")
+     *
+     * @param keyword       the keyword to search for in city attributes
+     * @param page          the page number (default is 0)
+     * @param size          the page size (default is 10)
+     * @param sortBy        the field to sort by (default is "name")
      * @param sortDirection the sort direction, either "asc" or "desc" (default is "asc")
      * @return a page of {@link CityResponse} objects matching the search criteria
      */
@@ -117,10 +123,11 @@ public class CityController {
 
     /**
      * Endpoint to get cities by country code with pagination and sorting.
-     * @param countryCode the country code to filter cities by
-     * @param page the page number (default is 0)
-     * @param size the page size (default is 10)
-     * @param sortBy the field to sort by (default is "name")
+     *
+     * @param countryCode   the country code to filter cities by
+     * @param page          the page number (default is 0)
+     * @param size          the page size (default is 10)
+     * @param sortBy        the field to sort by (default is "name")
      * @param sortDirection the sort direction, either "asc" or "desc" (default is "asc")
      * @return a page of {@link CityResponse} objects for the specified country code
      */
@@ -140,6 +147,7 @@ public class CityController {
 
     /**
      * Endpoint to check if a city with the specified city code exists.
+     *
      * @param cityCode the city code to check for existence
      * @return true if a city with the specified city code exists, false otherwise
      */
