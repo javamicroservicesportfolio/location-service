@@ -39,15 +39,18 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public CityResponse updateCity(Long id, CityRequest request) throws Exception {
-            return cityRepository.findById(id)
-                    .map(city -> {
-                        City updatedCity = CityMapper.updateCity(city, request);
-                        return cityRepository.save(updatedCity);
-                    })
-                    .map(CityMapper::toResponse)
-                    .orElseThrow(
-                            () -> new Exception("City with id " + id + " not found")
-                    );
+        City city = cityRepository.findById(id)
+                .orElseThrow(
+                        () -> new Exception("City with id " + id + " not found")
+                );
+
+        if (!city.getCityCode().equals(request.getCityCode()) && cityRepository.existsByCityCodeAndIdNot(request.getCityCode(), id)) {
+            throw new Exception("City with code " + request.getCityCode() + " already exists");
+        }
+
+        City updatedCity = CityMapper.updateCity(city, request);
+        cityRepository.save(updatedCity);
+        return CityMapper.toResponse(updatedCity);
     }
 
     @Override
